@@ -1,8 +1,12 @@
 require './lib/game_board'
+require './lib/position'
 
 class Battleship
   def initialize
     welcome_msg
+    computer_ship_placement
+    computer_done_placing_msg
+    user_setup
   end
 
   def welcome_msg
@@ -32,9 +36,41 @@ class Battleship
     puts "The first is two units long and the"
     puts "second is three units long."
     puts "The grid has A1 at the top left and D4 at the bottom right."
-
+    @user_board = GameBoard.new
     puts "\n\nEnter the squares for the two-unit ship:"
-    user_command = gets.chomp
+  end
+
+  def user_setup
+    place_ship(2)
+  end
+
+
+  def place_ship(length)
+    stopper = true
+    placement_array = []
+    # until result == true
+    user_commands = gets.chomp.split(" ")
+    until user_commands.count == length
+      user_commands = wrong_num_positions(2)
+    end
+    user_commands.each do |user_command|
+        pos = Position.new(user_command, @user_board.length)
+        if placement_array.last.adjacent?(pos)
+          placement_array << pos.placement
+        end
+      end
+      result = @user_board.place(placement_array)
+      unless result
+        puts "Please try placing your 2 unit frigate again:"
+      end
+    # end
+  end
+
+  def wrong_num_positions(number, wrong = true)
+    if wrong
+      puts "Wrong number of positions, please try again with #{number} positions:"
+    end
+    gets.chomp.split(" ")
   end
 
 end

@@ -10,4 +10,10 @@ class ShipTest < Minitest::Test
     assert_equal 2, s.length
   end
 
+  def test_you_can_set_position
+    s = Ship.new(2)
+    s.position = 12
+    assert_equal 12, s.position
+  end
+
 end

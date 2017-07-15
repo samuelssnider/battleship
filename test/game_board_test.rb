@@ -10,4 +10,11 @@ class GameBoardTest < Minitest::Test
     assert_equal [" ", " ", " ", " "],  gb.d
     assert_equal [gb.a, gb.b, gb.c, gb.d], gb.board
   end
+
+  def test_ships_array_initialized
+    gb = GameBoard.new
+    assert_equal 1, gb.ships.length
+  end
+
+
 end
