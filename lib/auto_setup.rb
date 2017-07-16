@@ -3,18 +3,17 @@ require './lib/ship'
 require './lib/auto_position'
 class AutoSetup
   attr_reader :board
-  def initialize(board, ships)
-    @board_ary = get_every_tile_array(board)
-    @length = @board_ary.length
+  def initialize(board, ships, length)
+    @board_rem_tiles
+    get_every_tile_array(board)
+    @length = length
     placement_each(ships)
-    binding.pry
   end
 
   def get_every_tile_array(board)
-    every_avail_tile = []
     board.each_with_index do |row, index|
       row.each_with_index do |tile,inner_index|
-        every_avail_tile << [index, inner_index]
+        @board_rem_tiles << AutoPosition.new([index, inner_index])
       end
     end
     every_avail_tile
@@ -27,72 +26,31 @@ class AutoSetup
   end
 
   def placement(ship)
-    first_position = @board_ary.sample
-    if ship.length == 1
-      ship_position = first_position
-      every_avail_tile.remove(ship_positon)
-    end
-    oth_pos_ary = build_continuation_arrray(first_position, ship.length)
-    second_position = oth_pos_ary.sample
-    if ship.length == 2
-      ship.position = [first_position, second_position]
-      every_avail_tile.remove(ship_position.each)
+    ship_positions = []
+    first_position = @board_rem_tiles.sample
+    @board_rem_tiles.remove(first_position)
+    ship_positions << first_position
+    ship positions = build_continuation(ship_positions)
+    (ship.length - 2).times do
+      ship_positions = build_continuation(ship_positions, true)
     end
   end
 
 
-  def build_continuation_arrray(first_position, ship_length)
-    continuation_array = []
-    rp = first_position[0]    #row position
-    cp = first_position[1]    #column position
-    case ship_length
-    when 1
-      ship.position = first_position
-    when 2
-      if rp == 0
-        if cp == 0
-          continuation_array << [rp, (cp + 1)]
-          continuation_array << [(rp + 1), cp]
-        elsif cp == (@length - 1)
-          continuation_array << [(rp + 1), cp]
-          continuation_array << [rp, (cp - 1)]
-        else
-          continuation_array << [rp, (cp + 1)]
-          continuation_array << [(rp - 1), cp]
-          continuation_array << [(rp + 1), cp]
-        end
-      elsif rp == (@length - 1)
-        if cp == 0
-          continuation_array << [rp, (cp + 1)]
-          continuation_array << [(rp - 1), cp]
-        elsif cp == (@length - 1)
-          continuation_array << [(rp - 1), cp]
-          continuation_array << [rp, (cp - 1)]
-        else
-          continuation_array << [rp, (cp + 1)]
-          continuation_array << [(rp - 1), cp]
-          continuation_array << [(rp + 1), cp]
-        end
-      else
-        if cp == 0
-          continuation_array << [rp, (cp + 1)]
-          continuation_array << [(rp - 1), cp]
-          continuation_array << [(rp + 1), cp]
-        elsif cp == (@length - 1)
-          continuation_array << [rp, (cp - 1)]
-          continuation_array << [(rp - 1), cp]
-          continuation_array << [(rp + 1), cp]
-        else
-          continuation_array << [rp, (cp + 1)]
-          continuation_array << [rp, (cp - 1)]
-          continuation_array << [(rp - 1), cp]
-          continuation_array << [(rp + 1), cp]
-        end
+  def build_continuation(positions, keep_straight = false)
+    unless keep_straight
+      additions = @board_remaining_tiles.find_all do |tile|
+        tile.adjacent?(positions[0])
       end
     else
-    "position not found"
+      additions = @board_remaining_tiles.find_all do |tile|
+        tile.straight?(place_set)
+      end
     end
-    continuation_array
+    save = additions.sample
+    @board_rem_tiles.remove(save)
+    positions << save
+    positions
   end
 
 end

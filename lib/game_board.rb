@@ -18,7 +18,7 @@ class GameBoard
     @board = [@a, @b, @c, @d]
     @length = 4
     @map_letters = ["A", "B", "C", "D"]
-    @ships = [Ship.new(2)]#, Ship.new(3)]
+    @ships = [Ship.new(2), Ship.new(3)]
     if automated
       automated_setup
     end
@@ -39,7 +39,7 @@ class GameBoard
   end
 
   def automated_setup
-    computer = AutoSetup.new(@board, @ships)
+    computer = AutoSetup.new(@board, @ships, @length)
     @board = computer.board
   end
 
