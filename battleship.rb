@@ -48,22 +48,24 @@ class Battleship
   def place_ship(length)
     stopper = true
     placement_array = []
-    # until result == true
-    user_commands = gets.chomp.split(" ")
-    until user_commands.count == length
-      user_commands = wrong_num_positions(2)
-    end
-    user_commands.each do |user_command|
-        pos = Position.new(user_command, @user_board.length)
-        if placement_array.last.adjacent?(pos)
-          placement_array << pos.placement
+    result = false
+    until result == true
+      user_commands = gets.chomp.split(" ")
+      if user_commands.count == length
+        user_commands.each do |user_command|
+          pos = Position.new(user_command, @user_board.length)
+          if placement_array.empty?
+            placement_array << pos.placement
+          else placement_array.last.adjacent?(pos) && pos.valid
+            placement_array << pos.placement
+          end
         end
-      end
       result = @user_board.place(placement_array)
+      end
       unless result
         puts "Please try placing your 2 unit frigate again:"
       end
-    # end
+    end
   end
 
   def wrong_num_positions(number, wrong = true)

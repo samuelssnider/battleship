@@ -4,34 +4,30 @@ class Position
               :valid
 
   def initialize(position, length)
-    rows = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"]
-    valid = is_valid?
+    @rows = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"]
+    valid = is_valid?(position, length)
   end
 
-  def is_valid?
+  def is_valid?(position, length)
     valid = true
     column = position[1]
-    if column.to_i >= length || colunm.to_i < 0
+    if column.to_i >= length || column.to_i < 0
       valid = false
       puts "That is not a valid position (number[column] index out of bounds)"
     end
     string = position[0]
     letter = string[0]
     up_letter = letter.upcase
-    let_pos = rows.find_index(up_letter)
-    if rows.find_index(up_letter).nil?
+    let_pos = @rows.find_index(up_letter)
+    if let_pos.nil? || let_pos >= length || let_pos < 0
       valid = false
       "That is not a valid position (letter[row] index out of bounds)"
     end
-      if let_pos >= length
-
+    if valid
         @placement = [let_pos, column.to_i]
-      else
-      end
-    else
-      puts
     end
     @placement
+    valid
   end
 
   def adjacent?(oth_position)
@@ -44,4 +40,5 @@ class Position
     end
     result
   end
+
 end
