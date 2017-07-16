@@ -61,7 +61,7 @@ class Battleship
         if @placement_array.count == user_commands.count
           result = @user_board.place(@placement_array.map {|position| position.placement})
         else
-          puts "Not adjacent positions"
+          puts "Not adjacent positions/ Not placed in a straight line"
         end
       else
         puts "Wrong number of cordinates!"
@@ -78,7 +78,13 @@ class Battleship
       if @placement_array.empty?
         @placement_array << pos
       else @placement_array.last.adjacent?(pos)
-        @placement_array << pos
+        if @placement_array.count >= 2
+          if pos.straight?(@placement_array)
+            @placement_array << pos
+          end
+        else
+          @placement_array << pos
+        end
       end
     else
       adj_valid = false
