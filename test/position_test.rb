@@ -23,6 +23,9 @@ class PositionTest < Minitest::Test
     pos_3 = Position.new(["l12"], 12)
     refute pos_2.valid
     assert_nil pos_2.placement
+    pos_4 = Position.new([""])
   end
+
+  def
 
 end

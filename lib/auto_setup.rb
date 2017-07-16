@@ -1,11 +1,13 @@
 require 'pry'
 require './lib/ship'
+require './lib/auto_position'
 class AutoSetup
   attr_reader :board
   def initialize(board, ships)
     @board_ary = get_every_tile_array(board)
     @length = @board_ary.length
     placement_each(ships)
+    binding.pry
   end
 
   def get_every_tile_array(board)
@@ -28,13 +30,13 @@ class AutoSetup
     first_position = @board_ary.sample
     if ship.length == 1
       ship_position = first_position
-      binding.pry
-      every_avail_tile.remove()
+      every_avail_tile.remove(ship_positon)
     end
     oth_pos_ary = build_continuation_arrray(first_position, ship.length)
     second_position = oth_pos_ary.sample
     if ship.length == 2
       ship.position = [first_position, second_position]
+      every_avail_tile.remove(ship_position.each)
     end
   end
 
