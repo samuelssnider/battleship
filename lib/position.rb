@@ -6,14 +6,15 @@ class Position
   def initialize(position, length)
     @rows = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"]
     @placement
-    @validv= is_valid?(position, length)
+    @valid
+    is_valid?(position, length)
   end
 
   def is_valid?(position, length)
     @valid = true
     if position[1].to_i == 0 && position[1] != "0"
       @valid = false
-      puts "Please enter a number a$$"
+      puts "Please enter a letter number pair ex: b1"
     end
     column = position[1].to_i
     if column >= length || column < 0

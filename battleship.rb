@@ -74,10 +74,12 @@ class Battleship
 
   def position_checker(user_command)
     pos = Position.new(user_command, @user_board.length)
-    if (@placement_array.empty? && pos.valid)
-      @placement_array << pos
-    elsif (@placement_array.last.adjacent?(pos) && pos.valid)
-      @placement_array << pos
+    if pos.valid
+      if @placement_array.empty?
+        @placement_array << pos
+      else @placement_array.last.adjacent?(pos)
+        @placement_array << pos
+      end
     else
       adj_valid = false
     end
