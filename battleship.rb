@@ -36,36 +36,54 @@ class Battleship
     puts "The first is two units long and the"
     puts "second is three units long."
     puts "The grid has A1 at the top left and D4 at the bottom right."
-    @user_board = GameBoard.new
-    puts "\n\nEnter the squares for the two-unit ship:"
+
   end
 
   def user_setup
+    @user_board = GameBoard.new
     place_ship(2)
+    place_ship(3)
   end
 
 
   def place_ship(length)
+    puts "\n\nEnter the squares for the #{length} unit ship:"
     stopper = true
     placement_array = []
     result = false
     until result == true
       user_commands = gets.chomp.split(" ")
       if user_commands.count == length
+        placement_array  = []
+        not_adj_valid = false
         user_commands.each do |user_command|
-          pos = Position.new(user_command, @user_board.length)
-          if placement_array.empty?
-            placement_array << pos.placement
-          else placement_array.last.adjacent?(pos) && pos.valid
-            placement_array << pos.placement
-          end
+          position_checker(user_command)
         end
-      result = @user_board.place(placement_array)
+        if placement_array.count == user_commands.count
+          binding.pry
+          result = @user_board.place(placement_array.map {|position| position.placement})
+        else
+          puts "Not adjacent positions"
+        end
+      else
+        puts "Wrong number of cordinates!"
       end
       unless result
-        puts "Please try placing your 2 unit frigate again:"
+        puts "Please try placing your #{length} unit frigate again:"
       end
     end
+  end
+
+  def position_checker(user_command)
+    pos = Position.new(user_command, @user_board.length)
+    if placement_array.empty? && pos.valid
+      @placement_array << pos
+    elsif placement_array.last.adjacent?(pos) && pos.valid
+      @placement_array << pos
+    else
+      adj_valid = false
+    end
+    adj_valid
   end
 
   def wrong_num_positions(number, wrong = true)
