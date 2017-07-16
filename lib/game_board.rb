@@ -53,6 +53,7 @@ class GameBoard
         ship.position.each do |pos|
           if p_att == pos
             result = false
+            puts "There is already a ship there!"
           end
         end
       end

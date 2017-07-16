@@ -54,14 +54,12 @@ class Battleship
     until result == true
       user_commands = gets.chomp.split(" ")
       if user_commands.count == length
-        placement_array  = []
-        not_adj_valid = false
+        @placement_array  = []
         user_commands.each do |user_command|
           position_checker(user_command)
         end
-        if placement_array.count == user_commands.count
-          binding.pry
-          result = @user_board.place(placement_array.map {|position| position.placement})
+        if @placement_array.count == user_commands.count
+          result = @user_board.place(@placement_array.map {|position| position.placement})
         else
           puts "Not adjacent positions"
         end
@@ -76,9 +74,9 @@ class Battleship
 
   def position_checker(user_command)
     pos = Position.new(user_command, @user_board.length)
-    if placement_array.empty? && pos.valid
+    if (@placement_array.empty? && pos.valid)
       @placement_array << pos
-    elsif placement_array.last.adjacent?(pos) && pos.valid
+    elsif (@placement_array.last.adjacent?(pos) && pos.valid)
       @placement_array << pos
     else
       adj_valid = false
