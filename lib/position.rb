@@ -12,17 +12,17 @@ class Position
 
   def is_valid?(position, length)
     @valid = true
-    if position[1].to_i == 0 && position[1] != "0"
-      @valid = false
-      puts "Please enter a letter number pair ex: b1"
-    end
+    input = position[0]
     column = position[1].to_i
+    # if column == 0 && position[1] != "0"
+    #   @valid = false
+    #   puts "Please enter a letter number pair ex: b1"
+    # end
     if column >= length || column < 0
       @valid = false
       puts "That is not a valid position (number[column] index out of bounds)"
     end
-    string = position[0]
-    letter = string[0]
+    letter = input
     up_letter = letter.upcase
     row = @rows.find_index(up_letter)
     if row.nil? || row >= length || row < 0
@@ -30,9 +30,8 @@ class Position
       "That is not a valid position (letter[row] index out of bounds)"
     end
     if @valid
-        @placement = [row, column.to_i]
+        @placement = [row, column]
     end
-    @placement
     @valid
   end
 

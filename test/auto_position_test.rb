@@ -15,6 +15,15 @@ class AutoPositionTest < Minitest::Test
   def test_two_positions_are_adjacent
     ap_one = AutoPosition.new([1,1])
     ap_two = AutoPosition.new([2,1])
+    ap_three = AutoPosition.new([2,2])
     assert ap_one.adjacent?(ap_two)
+    assert ap_two.adjacent?(ap_three)
+    refute ap_one.adjacent?(ap_one)
+  end
+
+  def test_two_positions_arent_adjacent
+    ap_one = AutoPosition.new([1,1])
+    ap_two = AutoPosition.new([3,1])
+    refute ap_one.adjacent?(ap_two)
   end
 end
