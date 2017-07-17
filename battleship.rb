@@ -4,11 +4,9 @@ require './lib/auto_position'
 
 class Battleship
   def initialize
-
     @user_victory = false
     @cpu_victory = false
-    @board_tiles = build_board_tiles
-
+    runner
   end
 
   def runner
@@ -16,6 +14,7 @@ class Battleship
     computer_ship_placement
     computer_done_placing_msg
     user_setup
+    @board_tiles = build_board_tiles
     until @cpu_victory || @user_victory
       user_turn
       cpu_turn
@@ -29,10 +28,10 @@ class Battleship
       puts "You managed somehow to tie!"
     elsif @user_victory
       puts "You won the game, Congratulations hero!"
-           "It took you #{@cpu_board.shots} to win!"
+      puts "It took you #{@cpu_board.shots} to win!"
     else
       puts "You were defeated by my mighty fleet of warships!"
-           "It took me #{@user_board.shots} to win!"
+      puts "It took me #{@user_board.shots} to win!"
     end
   end
 
@@ -51,7 +50,7 @@ class Battleship
     puts "Welcome to BATTLESHIP \n \n"
     puts "Would you like to (p)lay, read the (i)nstructions, or (q)uit?"
     user_command = gets.chomp
-    puts case user_command
+    case user_command
     when "p"
       computer_ship_placement
     when "i"
@@ -86,17 +85,20 @@ class Battleship
     @cpu_board.print_board
     puts "Enter a coordinate to fire on:"
     made = false
-    until made == true && unfired == true
+    blank = true
+    until made && blank
       input = gets.chomp
       pos = Position.new(input, @cpu_board.length)
       made = pos.valid
-      if (@cpu.board[pos.placement[0]][pos.placement[1]] == "H") ||  (@cpu.board[pos.placement[0]][pos.placement[1]] == "M")
-        unfired = true
+      if (@cpu_board.board[pos.placement[0]][pos.placement[1]] == "H") ||  (@cpu_board.board[pos.placement[0]][pos.placement[1]] == "M")
+        blank = false
+      else
+        blank = true
       end
       unless made
         puts "Not a valid position to fire at, try again:"
       end
-      unless unfired
+      unless blank
         puts "You've already fired on that position,try again:"
       end
     end
