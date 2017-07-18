@@ -23,18 +23,6 @@ class Battleship
     end
   end
 
-  def victory_check
-    if @user_victory && @cpu_victory
-      puts "You managed somehow to tie!"
-    elsif @user_victory
-      puts "You won the game, Congratulations hero!"
-      puts "It took you #{@cpu_board.shots} shots to win!"
-    else
-      puts "You were defeated by my mighty fleet of warships!"
-      puts "It took me #{@user_board.shots} shots to win!"
-    end
-    puts "Thankyou for playing Battleship"
-  end
 
   def build_board_tiles
     board = @user_board.board
@@ -46,28 +34,6 @@ class Battleship
     end
     board_tiles
   end
-
-  def modes
-    user_command = ""
-    until user_command == "b" || user_command == "i" || user_command == "e"
-      user_command = gets.chomp
-      case user_command
-      when "b"
-        computer_ship_placement({:diff => "Beginner", :length => 4
-                                 :ship_lengths = [2, 3]})
-      when "i"
-        computer_ship_placement({:diff => "Intermediate", :length => 8
-                                 :ship_lengths = [2, 3, 4]})  #Intermediate mode
-      when "e"
-        computer_ship_placement({:diff => "Expert", :length => 12
-                                  :ship_lengths = [2, 3, 4, 5]  })  #Expert mode
-      else
-        puts  "\nYou typed '#{user_command}', sorry, that is not a valid command."
-        puts  "Please try (b) - begginer, (i) - intermediate, (e) - expert."
-      end
-    end
-  end
-
 
   def welcome_msg
     puts "Welcome to BATTLESHIP \n \n"
@@ -94,6 +60,30 @@ class Battleship
     end
   end
 
+
+  def modes
+    user_command = ""
+    until user_command == "b" || user_command == "i" || user_command == "e"
+      user_command = gets.chomp
+      case user_command
+      when "b"
+        @difficulty = {:diff => "Beginner", :length => 4, :ship_lengths => [2, 3]}
+        computer_ship_placement(@difficulty)
+      when "i"
+        @difficulty = {:diff => "Intermediate", :length => 8,
+                       :ship_lengths => [2, 3, 4]})
+        computer_ship_placement(@difficulty) #Intermediate mode
+      when "e"
+        @difficulty = {:diff => "Expert", :length => 12,
+                       :ship_lengths => [2, 3, 4, 5]  }
+        computer_ship_placement(@difficulty)  #Expert mode
+      else
+        puts  "\nYou typed '#{user_command}', sorry, that is not a valid command."
+        puts  "Please try (b) - begginer, (i) - intermediate, (e) - expert."
+      end
+    end
+  end
+
   def computer_ship_placement(difficulty = 1)
     @cpu_board = GameBoard.new(difficulty, true)
   end
@@ -108,8 +98,9 @@ class Battleship
 
   def user_setup
     @user_board = GameBoard.new
-    place_ship(2)
-    place_ship(3)
+    @difficulty{:ship_lengths}.each do |length|
+      place_ship(length)
+    end
   end
 
   def user_turn
@@ -154,6 +145,19 @@ class Battleship
     if @user_board.ships.all? {|ship| ship.sunk}
       @cpu_victory = true
     end
+  end
+
+  def victory_check
+    if @user_victory && @cpu_victory
+      puts "You managed somehow to tie!"
+    elsif @user_victory
+      puts "You won the game, Congratulations hero!"
+      puts "It took you #{@cpu_board.shots} shots to win!"
+    else
+      puts "You were defeated by my mighty fleet of warships!"
+      puts "It took me #{@user_board.shots} shots to win!"
+    end
+    puts "Thankyou for playing Battleship"
   end
 
 
