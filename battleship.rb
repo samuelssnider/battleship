@@ -62,8 +62,9 @@ class Battleship
 
 
   def modes
+    puts  "Please enter difficulty (b) - beginner, (i) - intermediate, (e) - expert"
     user_command = ""
-    until user_command == "b" || user_command == "i" || user_command == "e"
+    until (user_command == "b") || (user_command == "i") || (user_command == "e")
       user_command = gets.chomp
       case user_command
       when "b"
@@ -71,11 +72,11 @@ class Battleship
         computer_ship_placement(@difficulty)
       when "i"
         @difficulty = {:diff => "Intermediate", :length => 8,
-                       :ship_lengths => [2, 3, 4]})
+                       :ship_lengths => [2, 3, 4]            }
         computer_ship_placement(@difficulty) #Intermediate mode
       when "e"
         @difficulty = {:diff => "Expert", :length => 12,
-                       :ship_lengths => [2, 3, 4, 5]  }
+                       :ship_lengths => [2, 3, 4, 5]    }
         computer_ship_placement(@difficulty)  #Expert mode
       else
         puts  "\nYou typed '#{user_command}', sorry, that is not a valid command."
@@ -97,8 +98,8 @@ class Battleship
   end
 
   def user_setup
-    @user_board = GameBoard.new
-    @difficulty{:ship_lengths}.each do |length|
+    @user_board = GameBoard.new(@difficulty)
+    @difficulty[:ship_lengths].each do |length|
       place_ship(length)
     end
   end

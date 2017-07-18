@@ -34,8 +34,8 @@ class GameBoard
     # beginner = false
     # intermediate = false
     # expert = false
-    @ship_lengths = difficulty{:ship_lengths}
-    @length = difficulty(:length)
+    @ship_lengths = difficulty[:ship_lengths]
+    @length = difficulty[:length]
     # case difficulty{:diff}
     # when "Beginner"
     #   beginner = true
