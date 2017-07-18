@@ -47,6 +47,28 @@ class Battleship
     board_tiles
   end
 
+  def modes
+    user_command = ""
+    until user_command == "b" || user_command == "i" || user_command == "e"
+      user_command = gets.chomp
+      case user_command
+      when "b"
+        computer_ship_placement({:diff => "Beginner", :length => 4
+                                 :ship_lengths = [2, 3]})
+      when "i"
+        computer_ship_placement({:diff => "Intermediate", :length => 8
+                                 :ship_lengths = [2, 3, 4]})  #Intermediate mode
+      when "e"
+        computer_ship_placement({:diff => "Expert", :length => 12
+                                  :ship_lengths = [2, 3, 4, 5]  })  #Expert mode
+      else
+        puts  "\nYou typed '#{user_command}', sorry, that is not a valid command."
+        puts  "Please try (b) - begginer, (i) - intermediate, (e) - expert."
+      end
+    end
+  end
+
+
   def welcome_msg
     puts "Welcome to BATTLESHIP \n \n"
     puts "Would you like to (p)lay, read the (i)nstructions, or (q)uit?"
@@ -55,7 +77,7 @@ class Battleship
       user_command = gets.chomp
       case user_command
       when "p"
-        computer_ship_placement
+        modes
       when "i"
         puts "This is a computer version of the tabletop game BATTLESHIP."
         puts "The player begins by placing his/her ships on the board."
@@ -72,8 +94,8 @@ class Battleship
     end
   end
 
-  def computer_ship_placement
-    @cpu_board = GameBoard.new(true)
+  def computer_ship_placement(difficulty = 1)
+    @cpu_board = GameBoard.new(difficulty, true)
   end
 
   def computer_done_placing_msg

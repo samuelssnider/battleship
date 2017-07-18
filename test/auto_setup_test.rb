@@ -8,7 +8,7 @@ class AutoSetupTest < Minitest::Test
 
   def test_auto_setup_test
     gb = GameBoard.new(true)
-    as = AutoSetup.new([" "])
+    as = AutoSetup.new(gb.board, gb.ships, gb.length)
     assert_equal GameBoard.new.board, gb.board
   end
 

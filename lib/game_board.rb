@@ -12,22 +12,45 @@ class GameBoard
               :length,
               :shots,
               :ships
-  def initialize(automated = false)
-    @a = Array.new(4, " ")
-    @b = Array.new(4, " ")
-    @c = Array.new(4, " ")
-    @d = Array.new(4, " ")
+  def initialize(difficulty, automated = false)
     @shots = 0
-    @board = []
-    init_board
-    @length = 4
     @map_letters = ["A", "B", "C", "D"]
     @ships = []
+    @a = []
+    @b = []
+    @c = []
+    @d = []
+    @board = []
+    @length
+    diff_setup(difficulty)
+    init_board
     @automated = automated
     if automated
-      @ships = [Ship.new(2), Ship.new(3)]
       automated_setup
     end
+  end
+
+  def diff_setup(difficulty)
+    # beginner = false
+    # intermediate = false
+    # expert = false
+    @ship_lengths = difficulty{:ship_lengths}
+    @length = 
+    # case difficulty{:diff}
+    # when "Beginner"
+    #   beginner = true
+    #   @length = :length
+    # when "Intermediate"
+    #   intermediate = true
+    #   @length = :length
+    # when "Expert"
+    #   expert = true
+    #   @length = length
+    # end
+    @a = Array.new(@length, " ")
+    @b = Array.new(@length, " ")
+    @c = Array.new(@length, " ")
+    @d = Array.new(@length, " ")
   end
 
   def init_board
@@ -55,6 +78,9 @@ class GameBoard
   end
 
   def automated_setup
+    @ship_lengths.each do |length|
+      @ships << Ship.new(length)
+    end
     computer = AutoSetup.new(@board, @ships, @length)
     @board = computer.board
   end
