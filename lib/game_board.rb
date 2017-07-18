@@ -70,7 +70,7 @@ class GameBoard
       placement_attempt.each do |p_att|
         @ships.each do |ship|
           ship.position.each do |pos|
-            if p_att == pos
+            if p_att.placement == pos.placement
               result = false
               puts "There is already a ship there!"
             end

@@ -11,16 +11,14 @@ class Battleship
 
   def runner
     welcome_msg
-    computer_ship_placement
     computer_done_placing_msg
     user_setup
     @board_tiles = build_board_tiles
     until @cpu_victory || @user_victory
       user_turn
       cpu_turn
-      victory_check
     end
-    puts "Thankyou for playing Battleship"
+    victory_check
   end
 
   def victory_check
@@ -28,11 +26,12 @@ class Battleship
       puts "You managed somehow to tie!"
     elsif @user_victory
       puts "You won the game, Congratulations hero!"
-      puts "It took you #{@cpu_board.shots} to win!"
+      puts "It took you #{@cpu_board.shots} shots to win!"
     else
       puts "You were defeated by my mighty fleet of warships!"
-      puts "It took me #{@user_board.shots} to win!"
+      puts "It took me #{@user_board.shots} shots to win!"
     end
+    puts "Thankyou for playing Battleship"
   end
 
   def build_board_tiles
@@ -90,10 +89,12 @@ class Battleship
       input = gets.chomp
       pos = Position.new(input, @cpu_board.length)
       made = pos.valid
-      if (@cpu_board.board[pos.placement[0]][pos.placement[1]] == "H") ||  (@cpu_board.board[pos.placement[0]][pos.placement[1]] == "M")
-        blank = false
-      else
-        blank = true
+      if made
+        if (@cpu_board.board[pos.placement[0]][pos.placement[1]] == "H") ||  (@cpu_board.board[pos.placement[0]][pos.placement[1]] == "M")
+          blank = false
+        else
+          blank = true
+        end
       end
       unless made
         puts "Not a valid position to fire at, try again:"
@@ -133,7 +134,7 @@ class Battleship
           position_checker(user_command)
         end
         if @placement_array.count == user_commands.count
-          result = @user_board.place(@placement_array.map {|position| position})
+          result = @user_board.place(@placement_array)
         else
           puts "Not adjacent positions/ Not placed in a straight line"
         end
