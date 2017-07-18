@@ -14,7 +14,7 @@ class GameBoard
               :ships
   def initialize(difficulty, automated = false)
     @shots = 0
-    @map_letters = ["A", "B", "C", "D"]
+    @map_letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"]
     @ships = []
     @a = []
     @b = []
@@ -31,22 +31,19 @@ class GameBoard
   end
 
   def diff_setup(difficulty)
-    # beginner = false
-    # intermediate = false
-    # expert = false
+    @beginner = false
+    @intermediate = false
+    @expert = false
     @ship_lengths = difficulty[:ship_lengths]
     @length = difficulty[:length]
-    # case difficulty{:diff}
-    # when "Beginner"
-    #   beginner = true
-    #   @length = :length
-    # when "Intermediate"
-    #   intermediate = true
-    #   @length = :length
-    # when "Expert"
-    #   expert = true
-    #   @length = length
-    # end
+    case difficulty[:diff]
+    when "Beginner"
+      @beginner = true
+    when "Intermediate"
+      @intermediate = true
+    when "Expert"
+      @expert = true
+    end
     @a = Array.new(@length, " ")
     @b = Array.new(@length, " ")
     @c = Array.new(@length, " ")
@@ -60,13 +57,16 @@ class GameBoard
 
   def print_board
     init_board
+    bar_separator = "=" * length * 3
+    top_num_display = ". 1 2 3 4 5 6 7 8 9101112"
+    this_num_display = top_num_display[0..((length * 2)+1)]
     if @automated
       puts "Computer Board"
     else
       puts "Your Board"
     end
-    puts "==========="
-    puts ". 1 2 3 4"
+    puts bar_separator
+    puts top_num_display
     @board.each_with_index do |row, index|
       print @map_letters[index]
       row.each do |tile|
@@ -74,6 +74,13 @@ class GameBoard
       end
       print "\n"
     end
+    puts bar_separator
+  end
+
+  def print_beginner_board
+    puts "==========="
+    puts ". 1 2 3 4"
+
     puts "===========".chomp
   end
 
