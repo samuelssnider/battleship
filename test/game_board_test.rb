@@ -13,7 +13,7 @@ class GameBoardTest < Minitest::Test
 
   def test_ships_array_initialized
     gb = GameBoard.new
-    assert_equal 1, gb.ships.length
+    assert_equal 2, gb.ships.length
   end
 
 

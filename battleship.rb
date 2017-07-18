@@ -137,8 +137,6 @@ class Battleship
 
   def place_ship(length)
     puts "\n\nEnter the squares for the #{length} unit ship:"
-    stopper = true
-    placement_array = []
     result = false
     until result == true
       user_commands = gets.chomp.split(" ")
