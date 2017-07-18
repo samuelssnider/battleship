@@ -11,14 +11,16 @@ class Battleship
 
   def runner
     welcome_msg
-    computer_done_placing_msg
-    user_setup
-    @board_tiles = build_board_tiles
-    until @cpu_victory || @user_victory
-      user_turn
-      cpu_turn
+    unless @quit
+      computer_done_placing_msg
+      user_setup
+      @board_tiles = build_board_tiles
+      until @cpu_victory || @user_victory
+        user_turn
+        cpu_turn
+      end
+      victory_check
     end
-    victory_check
   end
 
   def victory_check
@@ -48,17 +50,25 @@ class Battleship
   def welcome_msg
     puts "Welcome to BATTLESHIP \n \n"
     puts "Would you like to (p)lay, read the (i)nstructions, or (q)uit?"
-    user_command = gets.chomp
-    case user_command
-    when "p"
-      computer_ship_placement
-    when "i"
-      #
-    when "q"
-      #
-    else
-      puts  "\nYou typed '#{user_command}', sorry, that is not a valid command."
-      puts  "Please try (p) - play, (i) - instructions, (q) - quit."
+    user_command = ""
+    until user_command == "p"
+      user_command = gets.chomp
+      case user_command
+      when "p"
+        computer_ship_placement
+      when "i"
+        puts "This is a computer version of the tabletop game BATTLESHIP."
+        puts "The player begins by placing his/her ships on the board."
+        puts "After setup, you and the computer take turns firing at each other"
+        puts "until all ships on either side have been sunk. The first player to"
+        puts "sink the others' entire fleet wins the game!"
+      when "q"
+        @quit = true
+        break
+      else
+        puts  "\nYou typed '#{user_command}', sorry, that is not a valid command."
+        puts  "Please try (p) - play, (i) - instructions, (q) - quit."
+      end
     end
   end
 
@@ -83,6 +93,14 @@ class Battleship
   def user_turn
     @cpu_board.print_board
     puts "Enter a coordinate to fire on:"
+    auto_pos = AutoPosition.new(fire_validation.placement)
+    @cpu_board.fire!(auto_pos)
+    if @cpu_board.ships.all? {|ship| ship.sunk}
+      @user_victory = true
+    end
+  end
+
+  def fire_validation
     made = false
     blank = true
     until made && blank
@@ -96,18 +114,14 @@ class Battleship
           blank = true
         end
       end
-      unless made
-        puts "Not a valid position to fire at, try again:"
-      end
-      unless blank
-        puts "You've already fired on that position,try again:"
-      end
     end
-    auto_pos = AutoPosition.new(pos.placement)
-    @cpu_board.fire!(auto_pos)
-    if @cpu_board.ships.all? {|ship| ship.sunk}
-      @user_victory = true
+    unless made
+      puts "Not a valid position to fire at, try again:"
     end
+    unless blank
+      puts "You've already fired on that position,try again:"
+    end
+    pos
   end
 
   def cpu_turn
@@ -152,15 +166,11 @@ class Battleship
     if pos.valid
       if @placement_array.empty?
         @placement_array << pos
+      elsif @placement_array.last.adjacent?(pos) && @placement_array.count >= 2
+        @placement_array << pos
       else
-        if @placement_array.last.adjacent?(pos)
-          if @placement_array.count >= 2
-            if pos.straight?(@placement_array)
-              @placement_array << pos
-            end
-          else
-            @placement_array << pos
-          end
+        if  @placement_array.last.adjacent?(pos) && pos.straight?(@placement_array)
+          @placement_array << pos
         end
       end
     end
