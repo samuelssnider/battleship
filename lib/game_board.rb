@@ -119,21 +119,26 @@ class GameBoard
     if @ships.nil?
       result = true
     else
-      placement_attempt.each do |p_att|
-        @ships.each do |ship|
-          ship.position.each do |pos|
-            if p_att.placement == pos.placement
-              result = false
-              puts "There is already a ship there!"
-            end
-          end
-        end
-      end
+      result = ship_there?(placement_attempt, result)
     end
     if result
       ship = Ship.new(placement_attempt.length)
       ship.position = placement_attempt
       @ships << ship
+    end
+    result
+  end
+
+  def ship_there?(placement_attempt, result)
+    placement_attempt.each do |p_att|
+      @ships.each do |ship|
+        ship.position.each do |pos|
+          if p_att.placement == pos.placement
+            result = false
+            puts "There is already a ship there!"
+          end
+        end
+      end
     end
     result
   end
