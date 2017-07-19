@@ -12,7 +12,7 @@ class Battleship
 
   def runner
     timer
-    message_printer = MessagePrinter.new
+    @message_printer = MessagePrinter.new
     welcome_msg
     unless @quit
       computer_done_placing_msg
@@ -45,8 +45,7 @@ class Battleship
   end
 
   def welcome_msg
-    puts "Welcome to BATTLESHIP \n \n"
-    puts "Would you like to (p)lay, read the (i)nstructions, or (q)uit?"
+    @message_printer.welcome_message
     user_command = ""
     until user_command == "p"
       user_command = gets.chomp
@@ -54,24 +53,19 @@ class Battleship
       when "p"
         modes
       when "i"
-        puts "This is a computer version of the tabletop game BATTLESHIP."
-        puts "The player begins by placing his/her ships on the board."
-        puts "After setup, you and the computer take turns firing at each other"
-        puts "until all ships on either side have been sunk. The first player to"
-        puts "sink the others' entire fleet wins the game!"
+        @message_printer.instructions
       when "q"
         @quit = true
         break
       else
-        puts  "\nYou typed '#{user_command}', sorry, that is not a valid command."
-        puts  "Please try (p) - play, (i) - instructions, (q) - quit."
+        @message_printer.play_instr_quit_msg
       end
     end
   end
 
 
   def modes
-    puts  "Please enter difficulty (b) - beginner, (i) - intermediate, (e) - expert"
+    @message_printer.modes_msg
     user_command = ""
     until (user_command == "b") || (user_command == "i") || (user_command == "e")
       user_command = gets.chomp
@@ -89,8 +83,7 @@ class Battleship
                        :ship_lengths => [2, 3, 4, 5], :last => "L12"}
         computer_ship_placement  #Expert mode
       else
-        puts  "\nYou typed '#{user_command}', sorry, that is not a valid command."
-        puts  "Please try (b) - begginer, (i) - intermediate, (e) - expert."
+        @message_printer.modes_input_err
       end
     end
   end
@@ -100,11 +93,7 @@ class Battleship
   end
 
   def computer_done_placing_msg
-    puts "I have laid out my ships on the grid."
-    puts "You now need to layout your two ships."
-    puts "The first is two units long and the"
-    puts "second is three units long."
-    puts "The grid has A1 at the top left and #{@difficulty[:last]} at the bottom right."
+    @message_printer.cpu_setup_complete_msg(@difficulty[:last])
   end
 
 
@@ -116,7 +105,7 @@ class Battleship
   end
 
   def place_ship(length)
-    puts "\n\nEnter the squares for the #{length} unit ship:"
+    @message_printer.enter_ship_placement_cordinates(length)
     result = false
     until result == true
       user_commands = gets.chomp.split(" ")
@@ -128,15 +117,22 @@ class Battleship
         if @placement_array.count == user_commands.count
           result = @user_board.place(@placement_array)
         else
-          puts "Not adjacent positions/ Not placed in a straight line"
+          @message_printer.straight_adjacent_error_msg
         end
       else
-        puts "Wrong number of cordinates!"
+        @message_printer.wrong_num_cordinates
       end
       unless result
-        puts "Please try placing your #{length} unit frigate again:"
+        @message_printer.try_placing_again(length)
       end
     end
+  end
+
+  def wrong_num_positions(number, wrong = true)
+    if wrong
+      @message_printer.wrong_number_of_input_positions
+    end
+    gets.chomp.split(" ")
   end
 
   def position_checker(user_command)
@@ -157,7 +153,7 @@ class Battleship
 
   def user_turn
     @cpu_board.print_board
-    puts "Enter a coordinate to fire on:"
+    @message_printer.fire_cordinates_request
     auto_pos = AutoPosition.new(fire_validation.placement)
     @cpu_board.fire!(auto_pos)
     if @cpu_board.ships.all? {|ship| ship.sunk}
@@ -181,10 +177,10 @@ class Battleship
       end
     end
     unless made
-      puts "Not a valid position to fire at, try again:"
+      @message_printer.invalid_firing_position
     end
     unless blank
-      puts "You've already fired on that position,try again:"
+      @message_printer.already_fired_at
     end
     pos
   end
@@ -200,27 +196,16 @@ class Battleship
   end
 
   def victory_readout
-    if @user_victory && @cpu_victory
-      puts "You managed somehow to tie!"
+    if @user_victory && @cpu_victory(@cpu_board.shots)
+      @message_printer.tie_game
     elsif @user_victory
-      puts "You won the game, Congratulations hero!"
-      puts "It took you #{@cpu_board.shots} shots to win!"
+      @message_printer.user_victory(@cpu_board.shots)
     else
-      puts "You were defeated by my mighty fleet of warships!"
-      puts "It took me #{@user_board.shots} shots to win!"
+      @message_printer.cpu_victory(@user_board.shots)
     end
-    puts "The game took #{(Time.now - @start_time).round(2)} seconds to play."
-    puts "Thankyou for playing Battleship"
+    @message_printer.time_and_thankyou
   end
 
-
-
-  def wrong_num_positions(number, wrong = true)
-    if wrong
-      puts "Wrong number of positions, please try again with #{number} positions:"
-    end
-    gets.chomp.split(" ")
-  end
 
 end
 
