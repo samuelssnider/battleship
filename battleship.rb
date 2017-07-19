@@ -58,7 +58,7 @@ class Battleship
         @quit = true
         break
       else
-        @message_printer.play_instr_quit_msg
+        @message_printer.play_instr_quit_msg(user_command)
       end
     end
   end
@@ -83,7 +83,7 @@ class Battleship
                        :ship_lengths => [2, 3, 4, 5], :last => "L12"}
         computer_ship_placement  #Expert mode
       else
-        @message_printer.modes_input_err
+        @message_printer.modes_input_err(user_command)
       end
     end
   end

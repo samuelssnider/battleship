@@ -1,7 +1,4 @@
 class MessagePrinter
-  def initialize
-  end
-
   def welcome_message
     puts "Welcome to BATTLESHIP \n \n"
     puts "Would you like to (p)lay, read the (i)nstructions, or (q)uit?"
@@ -15,7 +12,7 @@ class MessagePrinter
     puts "sink the others' entire fleet wins the game!"
   end
 
-  def play_instr_quit__err_msg
+  def play_instr_quit_err_msg(user_command)
     puts  "\nYou typed '#{user_command}', sorry, that is not a valid command."
     puts  "Please try (p) - play, (i) - instructions, (q) - quit."
   end
@@ -24,7 +21,7 @@ class MessagePrinter
     puts  "Please enter difficulty (b) - beginner, (i) - intermediate, (e) - expert"
   end
 
-  def modes_input_err
+  def modes_input_err(user_command)
     puts  "\nYou typed '#{user_command}', sorry, that is not a valid command."
     puts  "Please try (b) - begginer, (i) - intermediate, (e) - expert."
   end
