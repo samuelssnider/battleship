@@ -1,6 +1,7 @@
 require './lib/game_board'
 require './lib/position'
 require './lib/auto_position'
+require './lib/message_printer'
 
 class Battleship
   def initialize
@@ -11,6 +12,7 @@ class Battleship
 
   def runner
     timer
+    message_printer = MessagePrinter.new
     welcome_msg
     unless @quit
       computer_done_placing_msg
@@ -142,13 +144,15 @@ class Battleship
     if pos.valid
       if @placement_array.empty?
         @placement_array << pos
-      elsif @placement_array.last.adjacent?(pos) && @placement_array.count >= 2
+      elsif @placement_array.last.adjacent?(pos) && @placement_array.count <= 1
         @placement_array << pos
       else
         if  @placement_array.last.adjacent?(pos) && pos.straight?(@placement_array)
           @placement_array << pos
         end
       end
+    end
+  end
 
 
   def user_turn
@@ -205,13 +209,11 @@ class Battleship
       puts "You were defeated by my mighty fleet of warships!"
       puts "It took me #{@user_board.shots} shots to win!"
     end
+    puts "The game took #{(Time.now - @start_time).round(2)} seconds to play."
     puts "Thankyou for playing Battleship"
   end
 
 
-    end
-
-  end
 
   def wrong_num_positions(number, wrong = true)
     if wrong
