@@ -36,22 +36,43 @@ class GameBoard
     @expert = false
     @ship_lengths = difficulty[:ship_lengths]
     @length = difficulty[:length]
+    @a = Array.new(@length, " ")
+    @b = Array.new(@length, " ")
+    @c = Array.new(@length, " ")
+    @d = Array.new(@length, " ")
     case difficulty[:diff]
     when "Beginner"
       @beginner = true
     when "Intermediate"
       @intermediate = true
+      @e = Array.new(@length, " ")
+      @f = Array.new(@length, " ")
+      @g = Array.new(@length, " ")
+      @h = Array.new(@length, " ")
     when "Expert"
       @expert = true
+      @i = Array.new(@length, " ")
+      @j = Array.new(@length, " ")
+      @k = Array.new(@length, " ")
+      @l = Array.new(@length, " ")
     end
-    @a = Array.new(@length, " ")
-    @b = Array.new(@length, " ")
-    @c = Array.new(@length, " ")
-    @d = Array.new(@length, " ")
   end
 
   def init_board
     @board = [@a, @b, @c, @d]
+    if @intermediate || @expert
+      @board << @e
+      @board << @f
+      @board << @g
+      @board << @h
+    end
+    if @expert
+      @board << @i
+      @board << @j
+      @board << @k
+      @board << @l
+    end
+
   end
 
 
@@ -66,7 +87,7 @@ class GameBoard
       puts "Your Board"
     end
     puts bar_separator
-    puts top_num_display
+    puts this_num_display
     @board.each_with_index do |row, index|
       print @map_letters[index]
       row.each do |tile|
@@ -77,12 +98,7 @@ class GameBoard
     puts bar_separator
   end
 
-  def print_beginner_board
-    puts "==========="
-    puts ". 1 2 3 4"
 
-    puts "===========".chomp
-  end
 
   def automated_setup
     @ship_lengths.each do |length|
