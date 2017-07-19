@@ -6,13 +6,13 @@ class AutoSetup
   def initialize(board, ships, length)
     @board_rem_tiles = []
     @board = board
-    get_every_tile_array(@board)
+    get_every_tile_array
     @length = length
     placement_each(ships)
   end
 
-  def get_every_tile_array(board)
-    board.each_with_index do |row, index|
+  def get_every_tile_array
+    @board.each_with_index do |row, index|
       row.each_with_index do |tile,inner_index|
         @board_rem_tiles << AutoPosition.new([index, inner_index])
       end

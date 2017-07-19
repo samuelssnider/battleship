@@ -10,6 +10,7 @@ class Battleship
   end
 
   def runner
+    timer
     welcome_msg
     unless @quit
       computer_done_placing_msg
@@ -19,8 +20,14 @@ class Battleship
         user_turn
         cpu_turn
       end
-      victory_check
+      victory_readout
+    else
+      puts "Goodbye"
     end
+  end
+
+  def timer
+    @start_time = Time.now
   end
 
 
@@ -68,16 +75,17 @@ class Battleship
       user_command = gets.chomp
       case user_command
       when "b"
-        @difficulty = {:diff => "Beginner", :length => 4, :ship_lengths => [2, 3]}
-        computer_ship_placement(@difficulty)
+        @difficulty = {:diff => "Beginner", :length => 4,
+                       :ship_lengths => [2, 3],:last => "D4"}
+        computer_ship_placement
       when "i"
         @difficulty = {:diff => "Intermediate", :length => 8,
-                       :ship_lengths => [2, 3, 4]            }
-        computer_ship_placement(@difficulty) #Intermediate mode
+                       :ship_lengths => [2, 3, 4], :last => "H8" }
+        computer_ship_placement #Intermediate mode
       when "e"
         @difficulty = {:diff => "Expert", :length => 12,
-                       :ship_lengths => [2, 3, 4, 5]    }
-        computer_ship_placement(@difficulty)  #Expert mode
+                       :ship_lengths => [2, 3, 4, 5], :last => "L12"}
+        computer_ship_placement  #Expert mode
       else
         puts  "\nYou typed '#{user_command}', sorry, that is not a valid command."
         puts  "Please try (b) - begginer, (i) - intermediate, (e) - expert."
@@ -85,8 +93,8 @@ class Battleship
     end
   end
 
-  def computer_ship_placement(difficulty = 1)
-    @cpu_board = GameBoard.new(difficulty, true)
+  def computer_ship_placement
+    @cpu_board = GameBoard.new(@difficulty, true)
   end
 
   def computer_done_placing_msg
@@ -94,8 +102,9 @@ class Battleship
     puts "You now need to layout your two ships."
     puts "The first is two units long and the"
     puts "second is three units long."
-    puts "The grid has A1 at the top left and D4 at the bottom right."
+    puts "The grid has A1 at the top left and #{@difficulty[:last]} at the bottom right."
   end
+
 
   def user_setup
     @user_board = GameBoard.new(@difficulty)
@@ -103,6 +112,44 @@ class Battleship
       place_ship(length)
     end
   end
+
+  def place_ship(length)
+    puts "\n\nEnter the squares for the #{length} unit ship:"
+    result = false
+    until result == true
+      user_commands = gets.chomp.split(" ")
+      if user_commands.count == length
+        @placement_array  = []
+        user_commands.each do |user_command|
+          position_checker(user_command)
+        end
+        if @placement_array.count == user_commands.count
+          result = @user_board.place(@placement_array)
+        else
+          puts "Not adjacent positions/ Not placed in a straight line"
+        end
+      else
+        puts "Wrong number of cordinates!"
+      end
+      unless result
+        puts "Please try placing your #{length} unit frigate again:"
+      end
+    end
+  end
+
+  def position_checker(user_command)
+    pos = Position.new(user_command, @user_board.length)
+    if pos.valid
+      if @placement_array.empty?
+        @placement_array << pos
+      elsif @placement_array.last.adjacent?(pos) && @placement_array.count >= 2
+        @placement_array << pos
+      else
+        if  @placement_array.last.adjacent?(pos) && pos.straight?(@placement_array)
+          @placement_array << pos
+        end
+      end
+
 
   def user_turn
     @cpu_board.print_board
@@ -148,7 +195,7 @@ class Battleship
     end
   end
 
-  def victory_check
+  def victory_readout
     if @user_victory && @cpu_victory
       puts "You managed somehow to tie!"
     elsif @user_victory
@@ -162,42 +209,6 @@ class Battleship
   end
 
 
-  def place_ship(length)
-    puts "\n\nEnter the squares for the #{length} unit ship:"
-    result = false
-    until result == true
-      user_commands = gets.chomp.split(" ")
-      if user_commands.count == length
-        @placement_array  = []
-        user_commands.each do |user_command|
-          position_checker(user_command)
-        end
-        if @placement_array.count == user_commands.count
-          result = @user_board.place(@placement_array)
-        else
-          puts "Not adjacent positions/ Not placed in a straight line"
-        end
-      else
-        puts "Wrong number of cordinates!"
-      end
-      unless result
-        puts "Please try placing your #{length} unit frigate again:"
-      end
-    end
-  end
-
-  def position_checker(user_command)
-    pos = Position.new(user_command, @user_board.length)
-    if pos.valid
-      if @placement_array.empty?
-        @placement_array << pos
-      elsif @placement_array.last.adjacent?(pos) && @placement_array.count >= 2
-        @placement_array << pos
-      else
-        if  @placement_array.last.adjacent?(pos) && pos.straight?(@placement_array)
-          @placement_array << pos
-        end
-      end
     end
 
   end

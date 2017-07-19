@@ -12,6 +12,9 @@ class Position
 
   def is_valid?(position, length)
     @valid = true
+    if position == nil
+      @valid = false
+    end
     input = position[0]
     column = (position[1..2].to_i) - 1
     # if column == 0 && position[1] != "0"

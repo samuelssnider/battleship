@@ -20,7 +20,7 @@ class PositionTest < Minitest::Test
     pos_2 = Position.new("a4", 3)
     refute pos_2.valid
     assert_nil pos_2.placement
-    pos_3 = Position.new("l12", 12)
+    pos_3 = Position.new("l13", 12)
     refute pos_2.valid
     assert_nil pos_2.placement
     # pos_4 = Position.new([""])

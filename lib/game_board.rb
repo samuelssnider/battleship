@@ -51,6 +51,10 @@ class GameBoard
       @h = Array.new(@length, " ")
     when "Expert"
       @expert = true
+      @e = Array.new(@length, " ")
+      @f = Array.new(@length, " ")
+      @g = Array.new(@length, " ")
+      @h = Array.new(@length, " ")
       @i = Array.new(@length, " ")
       @j = Array.new(@length, " ")
       @k = Array.new(@length, " ")
@@ -72,7 +76,6 @@ class GameBoard
       @board << @k
       @board << @l
     end
-
   end
 
 
