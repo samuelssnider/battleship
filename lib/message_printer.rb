@@ -77,8 +77,8 @@ class MessagePrinter
     puts "It took me #{shots} shots to win!"
   end
 
-  def time_and_thankyou
-    puts "The game took #{(Time.now - @start_time).round(2)} seconds to play."
+  def time_and_thankyou(time)
+    puts "The game took #{time} seconds to play."
     puts "Thankyou for playing Battleship"
   end
 

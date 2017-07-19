@@ -69,7 +69,6 @@ class Position
     unless r_straight || c_straight
       puts "Ship must be placed in a straight line"
     end
-    binding.pry
     (r_straight || c_straight)
   end
 

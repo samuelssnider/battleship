@@ -45,7 +45,7 @@ class AutoSetup
       end
     else
       additions = @board_rem_tiles.find_all do |tile|
-        tile.straight?(positions) && positions.any? {|position| position.adjacent?(tile)}
+        tile.straight?(positions)
       end
     end
     save = additions.sample

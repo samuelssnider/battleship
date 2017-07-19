@@ -196,14 +196,14 @@ class Battleship
   end
 
   def victory_readout
-    if @user_victory && @cpu_victory(@cpu_board.shots)
-      @message_printer.tie_game
+    if @user_victory && @cpu_victory
+      @message_printer.tie_game(@cpu_board.shots)
     elsif @user_victory
       @message_printer.user_victory(@cpu_board.shots)
     else
       @message_printer.cpu_victory(@user_board.shots)
     end
-    @message_printer.time_and_thankyou
+    @message_printer.time_and_thankyou((Time.now - @start_time).round(2))
   end
 
 
