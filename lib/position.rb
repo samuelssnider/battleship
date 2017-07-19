@@ -17,23 +17,21 @@ class Position
     end
     input = position[0]
     column = (position[1..2].to_i) - 1
-    # if column == 0 && position[1] != "0"
-    #   @valid = false
-    #   puts "Please enter a letter number pair ex: b1"
-    # end
     if column >= length || column < 0
       @valid = false
       puts "That is not a valid position (number[column] index out of bounds)"
     end
-    letter = input
-    up_letter = letter.upcase
-    row = @rows.find_index(up_letter)
-    if row.nil? || row >= length || row < 0
-      @valid = false
-      "That is not a valid position (letter[row] index out of bounds)"
-    end
-    if @valid
-        @placement = [row, column]
+    unless input == nil
+      letter = input
+      up_letter = letter.upcase
+      row = @rows.find_index(up_letter)
+      if row.nil? || row >= length || row < 0
+        @valid = false
+        "That is not a valid position (letter[row] index out of bounds)"
+      end
+      if @valid
+          @placement = [row, column]
+      end
     end
     @valid
   end

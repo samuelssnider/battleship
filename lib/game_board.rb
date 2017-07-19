@@ -81,7 +81,7 @@ class GameBoard
 
   def print_board
     init_board
-    bar_separator = "=" * length * 3
+    bar_separator = "=" * @length * 3
     top_num_display = ". 1 2 3 4 5 6 7 8 9101112"
     this_num_display = top_num_display[0..((length * 2)+1)]
     if @automated
