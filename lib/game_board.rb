@@ -1,6 +1,7 @@
 require './lib/auto_setup'
 require './lib/ship'
 require './lib/position'
+require './lib/screen'
 require 'pry'
 
 class GameBoard
@@ -81,7 +82,7 @@ class GameBoard
 
   def print_board
     init_board
-    bar_separator = "=" * @length * 3
+    bar_separator = "=" * (@length * 2 + 3)
     top_num_display = ". 1 2 3 4 5 6 7 8 9101112"
     this_num_display = top_num_display[0..((length * 2)+1)]
     if @automated
@@ -154,6 +155,11 @@ class GameBoard
         end
       end
     end
+    def fire_resolution(hit, save, cordinates)
+    @shots += 1
+  end
+
+  def fire_resolution(hit, save, cordinates)
     if hit
       @board[cordinates.placement[0]][cordinates.placement[1]] = "H"
       save.hit
@@ -166,7 +172,6 @@ class GameBoard
     else
       @board[cordinates.placement[0]][cordinates.placement[1]] = "M"
     end
-    @shots += 1
   end
 
 
