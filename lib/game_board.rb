@@ -79,7 +79,6 @@ class GameBoard
     end
   end
 
-
   def print_board
     init_board
     bar_separator = "=" * (@length * 2 + 3)
@@ -101,8 +100,6 @@ class GameBoard
     end
     puts bar_separator
   end
-
-
 
   def automated_setup
     @ship_lengths.each do |length|
@@ -155,7 +152,7 @@ class GameBoard
         end
       end
     end
-    def fire_resolution(hit, save, cordinates)
+    fire_resolution(hit, save, cordinates)
     @shots += 1
   end
 
